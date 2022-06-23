@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migrate
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: django-migrate-job
+        image: letsrock2007/django-app:v1
+        imagePullPolicy: IfNotPresent
+        command: ["python", "manage.py",  "migrate"]
+        envFrom:
+          - configMapRef:
+              name: django-config
